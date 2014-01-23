@@ -12,12 +12,12 @@ public class Event {
     private String title;
     private String desc; //The Description of the event
     private String date;
-    private String startTime;
+    private String startTime; //Times should be represented as "XX:XXAM"
     private String endTime;
     private String location;
 
     /**Event constructor 1
-     * Creates a blank event with no inition information
+     * Creates a blank event with no initial information
      */
 
     public Event() {
