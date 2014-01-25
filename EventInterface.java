@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 public class EventInterface extends JFrame implements ActionListener {
 
+    //Parts of the actual interface
     private Event event;
     private JButton save;
     private JButton close;
@@ -21,11 +22,13 @@ public class EventInterface extends JFrame implements ActionListener {
     private JTextField end;
     private JTextField location;
     private JTextArea description;
-    private boolean hasClosed; //This is terrible practice
 
+    //For the HAL joke
+    private boolean hasClosed; //This is terrible practice
+    
     public static void main(String[] args) {
         EventInterface test = new EventInterface();
-        test.open();
+        test.init();
     }
     
     public EventInterface() {
@@ -39,7 +42,7 @@ public class EventInterface extends JFrame implements ActionListener {
         event = e;
     }
 
-    public void open() {
+    public void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setSize(600, 600);
@@ -58,7 +61,6 @@ public class EventInterface extends JFrame implements ActionListener {
         add(close);
         save.addActionListener(this);
         close.addActionListener(this);
-        paintText();
     }
 
     public void paint(Graphics g) {
@@ -77,7 +79,7 @@ public class EventInterface extends JFrame implements ActionListener {
 
         //Draw a border on the description box 
         g.setColor(Color.BLACK); 
-        g.drawRect(10, 283, 570, 227); 
+        g.drawRect(10, 275, 571, 227); 
 
         paintText();
     }
