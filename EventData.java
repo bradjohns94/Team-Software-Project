@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**Event.java
  * @author Bradley Johns
  * @author Nathan Jackels
@@ -7,25 +9,23 @@
  * the event takes place
  */
 
-public class Event {
+public class EventData {
     
     private String title;
     private String desc; //The Description of the event
-    private String date;
-    private String startTime; //Times should be represented as "XX:XXAM"
-    private String endTime;
+    private Date startTime;
+    private Date endTime;
     private String location;
 
     /**Event constructor 1
      * Creates a blank event with no initial information
      */
 
-    public Event() {
+    public EventData() {
         title = "";
         desc = "";
-        date = "";
-        startTime = "";
-        endTime = "";
+        startTime = new Date();
+        endTime = new Date();
         location = "";
     }
 
@@ -39,11 +39,9 @@ public class Event {
      * @param eLocation the location of the event
      */
 
-    public Event(String eventTitle, String description, String eventDate,
-                 String eventStart, String eventEnd, String eLocation) {
+    public EventData(String eventTitle, String description, Date eventStart, Date eventEnd, String eLocation) {
         title = eventTitle;
         desc = description;
-        date = eventDate;
         startTime = eventStart;
         endTime = eventEnd;
         location = eLocation;
@@ -67,21 +65,12 @@ public class Event {
         desc = newDesc;
     }
 
-    /**changeDate
-     * Changes the date of the event
-     * @param newDate the new date of the event
-     */
-
-    public void changeDate(String newDate) {
-        date = newDate;
-    }
-
     /**changeStart
      * Changes the start time of the event
      * @param newStart the new start time of the event
      */
 
-    public void changeStart(String newStart) {
+    public void changeStart(Date newStart) {
         startTime = newStart;
     }
 
@@ -90,7 +79,7 @@ public class Event {
      * @param newEnd the new end time of the event
      */
 
-    public void changeEnd(String newEnd) {
+    public void changeEnd(Date newEnd) {
         endTime = newEnd;
     }
 
@@ -121,21 +110,12 @@ public class Event {
         return desc;
     }
 
-    /**getDate
-     * Returns the date of the event
-     * @return the event date
-     */
-
-    public String getDate() {
-        return date;
-    }
-
     /**getStart
      * Returns the start time of the event
      * @return the event start time
      */
 
-    public String getStart() {
+    public Date getStart() {
         return startTime;
     }
 
@@ -144,8 +124,8 @@ public class Event {
      * @return the event end time
      */
 
-    public String getEnd() {
-        return startTime;
+    public Date getEnd() {
+        return endTime;
     }
 
     /**getLocation
@@ -155,5 +135,16 @@ public class Event {
 
     public String getLocation() {
         return location;
+    }
+    
+    /** getSaveData
+     * Creates flexibility in expanding EventData by saving data with the description.
+     * @return An array of DataDescription, and it's corresponding Data.
+     */
+    public String[] getSaveData(){
+    	String[] result = new String[5];
+    	result[0] = "<Desc>(" + this.getDesc() + ")";
+    	result[1] = "<" + this.getLocation() + ")";
+    	result[2] = "<" + this.getTitle() + ")";
     }
 }
