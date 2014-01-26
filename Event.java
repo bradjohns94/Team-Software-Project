@@ -145,7 +145,7 @@ public class Event {
      */
 
     public String getEnd() {
-        return startTime;
+        return endTime;
     }
 
     /**getLocation
