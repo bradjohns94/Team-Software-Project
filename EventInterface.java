@@ -28,8 +28,8 @@ public class EventInterface extends JFrame implements ActionListener {
     private boolean hasClosed; //This is terrible practice
     
     /**EventInterface Constructor 1
-     * Opens a create event screen designed for the creation
-     * of a new event.
+     * Creates a new EventInterface assuming it is the user's intention to create
+     * a brand new event instead of altering a pre-existing one
      */
 
     public EventInterface() {
@@ -40,9 +40,9 @@ public class EventInterface extends JFrame implements ActionListener {
     }
 
     /**EventInterface Constructor 2
-     * Opens a event alteration screen in order to edit a
-     * pre-created event
-     * @param e the event that has already been established
+     * Creates a new EventInterface assuming it is the user's intention to alter
+     * a pre-existing even instead of creating a new one
+     * @param e the event that is being altered
      */
 
     public EventInterface(Event e) {
@@ -52,9 +52,7 @@ public class EventInterface extends JFrame implements ActionListener {
     }
 
     /**init
-     * Initializes the Event Interface with a series of text boxes and
-     * buttons in order to provide adequate space for the user to enter
-     * event information
+     * Initializes the GUI with text boxes and buttons
      */
 
     public void init() {
@@ -75,15 +73,15 @@ public class EventInterface extends JFrame implements ActionListener {
         add(close);
         save.addActionListener(this);
         close.addActionListener(this);
-
         paintText();
+
         setVisible(true);
     }
 
     /**paint
-     * paints all GUI components that require a Graphics object
-     * including the title display
-     * @param g the Graphics object to be used for painting
+     * adds to the GUI what init and paintText could not because
+     * they required a graphics object
+     * @param g the graphics object to paint with
      */
 
     public void paint(Graphics g) {
@@ -102,8 +100,8 @@ public class EventInterface extends JFrame implements ActionListener {
     }
 
     /**paintText
-     * A segmented method to be used by init which simply sets
-     * all the parameters for the text objects
+     * an extension of init that sets the starting parameters
+     * for the text boxes
      */
 
     public void paintText() {
@@ -131,7 +129,6 @@ public class EventInterface extends JFrame implements ActionListener {
         description.setWrapStyleWord(true);
         description.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        //Add the Text boxed
         add(title);
         add(date);
         add(start);
@@ -141,8 +138,8 @@ public class EventInterface extends JFrame implements ActionListener {
     }
 
     /**getEvent
-     * passes the event information to data
-     * @return the event represented in the interface
+     * returns the event object represented in the interface
+     * @return an even object representing the interface
      */
 
     public Event getEvent() {
@@ -150,9 +147,9 @@ public class EventInterface extends JFrame implements ActionListener {
     }
 
     /**actionPerformed
-     * Handles the actionlisteners for when one of the interface's
-     * buttons has been pressed
-     * @param e the actionevent that occurred to call the method
+     * Tells the program how to react in the case that one of
+     * the buttons is clicked
+     * @param e the event of one of the buttons being pressed
      */
 
     public void actionPerformed(ActionEvent e) {
@@ -163,7 +160,7 @@ public class EventInterface extends JFrame implements ActionListener {
             event.changeEnd(end.getText());
             event.changeLocation(location.getText());
             event.changeDesc(description.getText());
-            //TODO pass the event to data and close
+            //TODO connect to data classes and dispose
         } else if (e.getSource() == close) {
             if (hasClosed) dispose();
             else {
