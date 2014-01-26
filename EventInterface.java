@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class EventInterface extends JFrame implements ActionListener {
 
@@ -26,28 +27,41 @@ public class EventInterface extends JFrame implements ActionListener {
     //For the HAL joke
     private boolean hasClosed; //This is terrible practice
     
-    public static void main(String[] args) {
-        EventInterface test = new EventInterface();
-        test.init();
-    }
-    
+    /**EventInterface Constructor 1
+     * Opens a create event screen designed for the creation
+     * of a new event.
+     */
+
     public EventInterface() {
         super("Add Event");
         event = new Event("Event Title", "Event Description", "Event Date",
                           "Event Start Time", "Event End Time", "Event Location");
+        init();
     }
+
+    /**EventInterface Constructor 2
+     * Opens a event alteration screen in order to edit a
+     * pre-created event
+     * @param e the event that has already been established
+     */
 
     public EventInterface(Event e) {
         super(e.getTitle());
         event = e;
+        init();
     }
+
+    /**init
+     * Initializes the Event Interface with a series of text boxes and
+     * buttons in order to provide adequate space for the user to enter
+     * event information
+     */
 
     public void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setSize(600, 600);
         setBackground(Color.WHITE);
-        setVisible(true);
 
         //Set the HAL joke...
         hasClosed = false;
@@ -61,7 +75,16 @@ public class EventInterface extends JFrame implements ActionListener {
         add(close);
         save.addActionListener(this);
         close.addActionListener(this);
+
+        paintText();
+        setVisible(true);
     }
+
+    /**paint
+     * paints all GUI components that require a Graphics object
+     * including the title display
+     * @param g the Graphics object to be used for painting
+     */
 
     public void paint(Graphics g) {
         super.paint(g);
@@ -76,20 +99,19 @@ public class EventInterface extends JFrame implements ActionListener {
         setFont(new Font("Serif", Font.BOLD, 42)); 
         g.setColor(Color.WHITE); 
         g.drawString("Add Event", 10, 90); 
-
-        //Draw a border on the description box 
-        g.setColor(Color.BLACK); 
-        g.drawRect(10, 275, 571, 227); 
-
-        paintText();
     }
+
+    /**paintText
+     * A segmented method to be used by init which simply sets
+     * all the parameters for the text objects
+     */
 
     public void paintText() {
         //Perform Text box operations
-        Font textFont = new Font("Serif", Font.PLAIN, 20);
-        title = new JTextField(event.getTitle());
-        title.setBounds(10, 80, 180, 35);
-        title.setFont(textFont);
+        Font textFont = new Font("Serif", Font.PLAIN, 20);  
+        title = new JTextField(event.getTitle());  
+        title.setBounds(10, 80, 180, 35);  
+        title.setFont(textFont);  
         date = new JTextField(event.getDate()); 
         date.setBounds(10, 135, 180, 35);
         date.setFont(textFont);
@@ -107,7 +129,9 @@ public class EventInterface extends JFrame implements ActionListener {
         description.setFont(textFont);
         description.setLineWrap(true);
         description.setWrapStyleWord(true);
+        description.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+        //Add the Text boxed
         add(title);
         add(date);
         add(start);
@@ -115,6 +139,21 @@ public class EventInterface extends JFrame implements ActionListener {
         add(location);
         add(description);
     }
+
+    /**getEvent
+     * passes the event information to data
+     * @return the event represented in the interface
+     */
+
+    public Event getEvent() {
+        return event;
+    }
+
+    /**actionPerformed
+     * Handles the actionlisteners for when one of the interface's
+     * buttons has been pressed
+     * @param e the actionevent that occurred to call the method
+     */
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save) {
@@ -124,13 +163,7 @@ public class EventInterface extends JFrame implements ActionListener {
             event.changeEnd(end.getText());
             event.changeLocation(location.getText());
             event.changeDesc(description.getText());
-
-            System.out.println("New Event Created:\nTitle: " + title.getText() + "\n" +
-                                "Date: " + date.getText() + "\n" + 
-                                "Start Time: " + start.getText() + "\n" +
-                                "End Time: " + end.getText() + "\n" +
-                                "Location: " + location.getText() + "\n" +
-                                "Description: " + description.getText());
+            //TODO pass the event to data and close
         } else if (e.getSource() == close) {
             if (hasClosed) dispose();
             else {
