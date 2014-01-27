@@ -10,7 +10,6 @@ import java.util.Scanner;
  */
 
 public class DataStorage {
-	ArrayList<EventData> events = new ArrayList<EventData>();
 	
 	/**Constructor 1
 	 * This constructor loads data if the file is present, and creates the file otherwise.
@@ -19,7 +18,6 @@ public class DataStorage {
 		Scanner file;
 		try {
 			file = new Scanner(new File("./CalendarData.data"));
-			loadData();
 		} catch (FileNotFoundException e) {
 			//File doesn't exist, create it.
 			File newFile = new File("./CalendarData.data");
@@ -35,20 +33,22 @@ public class DataStorage {
 	}
 
 	/**loadData
-	 * This method loads data from the storage file.
+	 * This method loads data from the storage file, then returns it for use.
+	 * @return The loaded EventData.
 	 */
-	private void loadData() {
+	public ArrayList<EventData> loadData() {
+		ArrayList<EventData> result = new ArrayList<EventData>()
 		Scanner file = new Scanner(new File("./CalendarData.data"));
 		String input = "";
 		String[] parameters = EventData.parameterOrder();
 		while(file.hasNext()){
 			input = file.nextLine();
 			if((input.toCharArray()[0] == '@')){
-				String[] data = new String[parameters.length];
+				String[] data = new String[parameters.length];	//Retrieve Data parameters
 				for(int i = 0; i < data.length; i++){
-					data[i] = null;
+					data[i] = null;		//Used to check for valid entrys later
 				}
-				for(int i = 0; i < parameters.length; i++){
+				for(int i = 0; i < parameters.length; i++){	//Data is loaded from file
 					String temp = file.nextLine();
 					String param = temp.substring(temp.indexOf('<')+1,temp.indexOf('>'));
 					for(int j = 0; j < parameters.length; j++){
@@ -58,24 +58,17 @@ public class DataStorage {
 					}
 				}
 				boolean validData = true;
-				for(int i = 0; i < data.length; i++){
+				for(int i = 0; i < data.length; i++){	//Data is checked for missing information
 					if(data[i] == null){
 						validData = false;
 					}
 				}
-				if(validData){
-					this.events.add(new EventData(data));
+				if(validData){		//If entry is complete, it is recorded for later use
+					result.add(new EventData(data));
 				}
 			}
 		}
-	}
-	
-	/**getData
-	 * A getter method for the data.
-	 * @return An arraylist of the EventData that has been loaded from the storage file.
-	 */
-	protected ArrayList<EventData> getData() {
-		return events;
+		return result;
 	}
 	
 	/**saveData
