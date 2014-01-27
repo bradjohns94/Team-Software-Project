@@ -285,12 +285,7 @@ public class EventData {
      * Returns the end time of the event
      * @return the event end time
      */
-
-<<<<<<< HEAD:Event.java
-    public String getEnd() {
-=======
     public Date getEnd() {
->>>>>>> e61e84c211f3d375a7784d8f06242fa9c7446f84:EventData.java
         return endTime;
     }
 
