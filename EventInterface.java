@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class EventInterface extends JFrame implements ActionListener {
 
     //Parts of the actual interface
-    private Event event;
+    private EventData event;
     private JButton save;
     private JButton close;
     private JTextField title;
@@ -45,7 +45,7 @@ public class EventInterface extends JFrame implements ActionListener {
      * @param e the event that is being altered
      */
 
-    public EventInterface(Event e) {
+    public EventInterface(EventData e) {
         super(e.getTitle());
         event = e;
         init();
@@ -64,7 +64,7 @@ public class EventInterface extends JFrame implements ActionListener {
         //Set the HAL joke...
         hasClosed = false;
 
-        //Next lets add some buttonds
+        //Next lets add some buttons
         save = new JButton("Save Changes"); 
         save.setBounds(410, 490, 180, 55);
         close = new JButton("Close");
@@ -142,7 +142,7 @@ public class EventInterface extends JFrame implements ActionListener {
      * @return an even object representing the interface
      */
 
-    public Event getEvent() {
+    public EventData getEvent() {
         return event;
     }
 
