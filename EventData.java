@@ -235,6 +235,26 @@ public class EventData {
     public void changeStart(Date newStart) {
         startTime = newStart;
     }
+    
+    
+    public void changeStart(String newStart){
+    	startTime = toDate(newStart);
+    }
+    
+    /**toDate
+     * some of the accepted formats:
+     * MM/DD/YYYY HH:MMAM
+     * MM/DD/YYYY HH:MM AM
+     * M/D/YY H:M:AM
+     * HH:MMAM MM/DD/YYYY
+     * H:MM: AM M/DD/YY
+     * 
+     */
+    private void toDate(String e){
+    	//TODO--------------------------------------------
+    	
+    	
+    }
 
     /**changeEnd
      * Changes the end time of the event
@@ -243,6 +263,10 @@ public class EventData {
 
     public void changeEnd(Date newEnd) {
         endTime = newEnd;
+    }
+    
+    public void changeEnd(String newEnd){
+    	endTime = toDate(newEnd);
     }
 
     /**changeLocation
