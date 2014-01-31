@@ -68,7 +68,7 @@ public class Control {
 			String[] tempData = temp.dataOrdered();
 			boolean sameEvent = true;
 			for(int i = 0; ((i < tempData.length) && (i < eData.length)); i++){
-				if(!eData[i].equals(tempData[i]){
+				if(!eData[i].equals(tempData[i])){
 					//If any of the data doesn't match, return.
 					sameEvent = false;
 				}
@@ -76,7 +76,7 @@ public class Control {
 			if(sameEvent){
 				//Search for Event, remove from arrayList:
 				for(int i = 0; i < events.size(); i++){
-					if(event.get(i).equals(temp)){
+					if(events.get(i).equals(temp)){
 						events.remove(i);
 						return true;
 					}
