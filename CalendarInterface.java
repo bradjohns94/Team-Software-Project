@@ -18,7 +18,7 @@ import java.awt.geom.Rectangle2D;
 
 // <applet width="1500" height="750" code="CalendarInterface.class"> Applet </applet>
 
-public class CalendarInterface extends Applet implements ActionListener, KeyListener {
+public class CalendarInterface extends Applet implements ActionListener, KeyListener, MouseListener {
     
     private Date selected;
     private int view; //0 for month, 1 for week, 2 for day
@@ -33,6 +33,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
     private JButton monthView;
     private JTextField go;
     private int viewCord = -1; //Chooses the location of monthview button
+private Control ctrl;
 
     /**init
      * First method called when opening calendar application
@@ -42,26 +43,31 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
      */
     
     public void init() {
+        ctrl = new Control(this);
+
         selected = new Date();
         view = 0;
         
         picture = getImage(getCodeBase(), "HAL.png");
 
+        int startX = getWidth() / 3;
+        int width = ((getWidth() - (getWidth() / 3)) / 7) - 2;
+        int height = getHeight() / 10;
         next = new JButton("Next"); 
-        next.setBounds(1359, 0, 140, 76);  
+        next.setBounds(getWidth() - width - 1, 0, width, height);  
         last = new JButton("Last");
-        last.setBounds(507, 0, 140, 76);
+        last.setBounds(startX + 1, 0, width, height);
         addEvent = new JButton("Add Event");
-        addEvent.setBounds(1217, 0, 140, 76);
+        addEvent.setBounds(getWidth() - (2 * width) - 3, 0, width, height);
         removeEvent = new JButton("Remove Event");
-        removeEvent.setBounds(649, 0, 140, 76);
+        removeEvent.setBounds(startX + width + 3, 0, width, height);
         dayView = new JButton("Day View");
-        dayView.setBounds(1075, 0, 140, 76);
+        dayView.setBounds(getWidth() - (3 * width) - 5, 0, width, height);
         weekView = new JButton("Week View");
-        weekView.setBounds(791, 0, 140, 76);
+        weekView.setBounds(startX + (2 * width) + 5, 0, width, height);
         monthView = new JButton("Month View");
         go = new JTextField("mm/dd/yyyy");
-        go.setBounds(933, 46, 140, 30); 
+        go.setBounds(startX + (3 * width) + 7, getHeight() / 20, width + 5, ((getHeight() / 7)) / 3); 
         go.setHorizontalAlignment(JTextField.CENTER);
 
         next.addActionListener(this);
@@ -72,6 +78,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         weekView.addActionListener(this);
         dayView.addActionListener(this);
         go.addKeyListener(this);
+        addMouseListener(this);
     }
 
     /**paint
@@ -92,19 +99,21 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         setBackground(Color.BLACK);
         g.setColor(Color.CYAN);
 
+        int width = (2 * (getWidth() / 3)) / 7;
+
         if (view == 1) {
-            viewCord = 791;
+            viewCord = (getWidth() / 3) + (2 * width) + 5;
         } else if (view == 2) {
-            viewCord = 1075;
+            viewCord = getWidth() - (3 * width) - 5;
         } else {
             viewCord = -1;
         }
 
         //Start by separating some reigons
-        g.drawLine(506, 0, 506, 750);
-        g.drawLine(506, 78, 1500, 78);
-        g.drawLine(0, 749, 1500, 749);
-        g.drawLine(1499, 0, 1499, 750);
+        g.drawLine((getWidth() / 3), 0, (getWidth() / 3), getHeight());
+        g.drawLine((getWidth() / 3), (getHeight() / 10), getWidth(), (getHeight() / 10));
+        g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+        g.drawLine(getWidth() - 1, 0, getWidth() - 1, getHeight());
 
         FontMetrics metrics = g.getFontMetrics(); 
 
@@ -116,7 +125,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
             drawDay(g);
         }
 
-        if (viewCord != -1) monthView.setBounds(viewCord, 0, 140, 76);
+        if (viewCord != -1) monthView.setBounds(viewCord, 0, width, getHeight() / 10);
 
         add(last);
         add(next);
@@ -131,11 +140,12 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         g.setFont(new Font("Serif", Font.BOLD, 20)); 
         metrics = g.getFontMetrics(); 
         Rectangle2D text = metrics.getStringBounds("Goto", g); 
-        int textX = 1003 - (int)(text.getWidth() / 2); 
-        int textY = 23 + (int)(text.getHeight() / 2); 
+        int textX = (getWidth() / 3) + ((getWidth() - (getWidth() / 3)) / 2)
+                    - (int)(text.getWidth() / 2); 
+        int textY = ((getHeight() / 10) / 4) + (int)(text.getHeight() / 2); 
         g.drawString("Goto", textX, textY); 
 
-        g.drawImage(picture, 5, 5, 495, 495, this); 
+        g.drawImage(picture, 5, 5, (getWidth() / 3) - 5, (getWidth() / 3) - 5, this); 
     }
 
     /**drawDay
@@ -152,12 +162,13 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
 
         //Highlight the day
         g.setColor(new Color(0x660000));
-        g.fillRect(507, 79, 992, 670);
+        g.fillRect((getWidth() / 3) + 1, (getHeight() / 10) + 1, 2 * (getWidth() / 3) - 2, ((getHeight() / 10) * 9) - 2);
 
         //Draw the day-specific text
         g.setColor(Color.WHITE);
         Rectangle2D textBlock = metrics.getStringBounds(date, g);
-        g.drawString(date, 510, 79 + (int)textBlock.getHeight());
+        g.drawString(date, (getWidth() / 3) + 4,
+                    ((getHeight() / 10) + 1) + (int)textBlock.getHeight());
     }
 
     /**drawWeek
@@ -169,15 +180,20 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
 
     private void drawWeek(Graphics g) {
         FontMetrics metrics = g.getFontMetrics();
-        g.drawLine(1003, 78, 1003, 750);
-        g.drawLine(506, 302, 1500, 302);
-        g.drawLine(506, 526, 1500, 526);
-        g.drawLine(1003, 638, 1500, 638);
+        int mid = 2 * (getWidth() / 3);
+        g.drawLine(mid , getHeight() / 10, mid, getHeight());
+        int yCord = (getHeight() / 10) + ((getHeight() - (getHeight() / 10)) / 3);
+        g.drawLine(getWidth() / 3, yCord, getWidth(), yCord);
+        yCord = (getHeight() / 10) + (2 * (getHeight() - (getHeight() / 10)) / 3);
+        g.drawLine(getWidth() / 3, yCord, getWidth(), yCord);
+        yCord += (getHeight() - (getHeight() / 10)) / 6;
+        g.drawLine(mid, yCord, getWidth(), yCord);
 
         //Highlight the Selected Day
         g.setColor(new Color(0x660000));
+        int width = ((2 * (getWidth() / 3)) / 2) - 3;
         if (selected.getDay() < 5) {
-            int highlightX = 507 + (497 * (selected.getDay() % 2));
+            int highlightX = (getWidth() / 3) + 1 + (497 * (selected.getDay() % 2));
             int highlightY = 79 + (224 * (selected.getDay() / 2));
             g.fillRect(highlightX, highlightY, 495, 222);
         } else {
@@ -399,6 +415,14 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         return new Date(year, month, dayNum);
     }
 
+    public int getViewStyle() {
+        return view;
+    }
+
+    public void changeViewStyle(int newView) {
+        view = newView;
+    }
+
     /**actionPerformed
      * Handles all cases when one of the buttons used to change
      * the interface of the calendar is pressed
@@ -442,6 +466,10 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         } else if (e.getSource() == monthView) { //Goto month view
             view = 0;
             remove(monthView);
+        } else if (e.getSource() == addEvent) { //Goto the addEvent page
+            EventInterface iface = new EventInterface(ctrl);
+            iface.init();
+            iface.setVisible(true);
         }
         repaint();
     }
@@ -475,4 +503,31 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         }
     }
     public void keyTyped(KeyEvent e) { }
+
+    public void mouseClicked(MouseEvent e) {
+        int xCord = e.getX();
+        int yCord = e.getY();
+        if (view == 0) {
+            if (xCord > 506 && yCord > 174) {
+                int first = (new Date(selected.getYear(), selected.getMonth(), 1)).getDay();
+                int row = (yCord - 175) / 96;
+                int col = (xCord - 506) / 142;
+                int day = 1 + (7 * row);
+                day += (col - first);
+                Date newSelected = new Date(selected.getYear(), selected.getMonth(), day);
+                if (newSelected.getMonth() == selected.getMonth()) {
+                    selected = new Date(selected.getYear(), selected.getMonth(), day);
+                }
+                repaint();
+            }
+        }
+    }
+
+    public void mouseExited(MouseEvent e) { }
+
+    public void mouseEntered(MouseEvent e) { }
+
+    public void mousePressed(MouseEvent e) { }
+
+    public void mouseReleased(MouseEvent e) { }
 }
