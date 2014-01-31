@@ -37,8 +37,11 @@ public class DataStorage {
 	 * @return The loaded EventData.
 	 */
 	public ArrayList<EventData> loadData() {
-		ArrayList<EventData> result = new ArrayList<EventData>()
-		Scanner file = new Scanner(new File("./CalendarData.data"));
+		ArrayList<EventData> result = new ArrayList<EventData>();
+        Scanner file;
+        try {
+            file = new Scanner(new File("./CalendarData.data"));
+        } catch (Exception e) {}
 		String input = "";
 		String[] parameters = EventData.parameterOrder();
 		while(file.hasNext()){
