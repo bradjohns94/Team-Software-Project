@@ -8,6 +8,7 @@
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
+import java.util.Date;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -24,19 +25,22 @@ public class EventInterface extends JFrame implements ActionListener {
     private JTextField location;
     private JTextArea description;
 
+    private boolean newEvent;
+    private Control ctrl;
+
     //For the HAL joke
     private boolean hasClosed; //This is terrible practice
-    
+
     /**EventInterface Constructor 1
      * Creates a new EventInterface assuming it is the user's intention to create
      * a brand new event instead of altering a pre-existing one
      */
 
-    public EventInterface() {
+    public EventInterface(Control toSend) {
         super("Add Event");
-        event = new Event("Event Title", "Event Description", "Event Date",
-                          "Event Start Time", "Event End Time", "Event Location");
-        init();
+        event = new EventData();
+        ctrl = toSend;
+        newEvent = true;
     }
 
     /**EventInterface Constructor 2
@@ -45,18 +49,16 @@ public class EventInterface extends JFrame implements ActionListener {
      * @param e the event that is being altered
      */
 
-    public EventInterface(EventData e) {
-        super(e.getTitle());
+    public EventInterface(EventData e, Control toSend) {
+        super(e.getTitle()); 
         event = e;
-        init();
-    }
-
+        ctrl = toSend; newEvent = false; } 
     /**init
      * Initializes the GUI with text boxes and buttons
      */
 
     public void init() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setSize(600, 600);
         setBackground(Color.WHITE);
@@ -64,16 +66,18 @@ public class EventInterface extends JFrame implements ActionListener {
         //Set the HAL joke...
         hasClosed = false;
 
-        //Next lets add some buttons
+        //Next lets add some buttonds
         save = new JButton("Save Changes"); 
         save.setBounds(410, 490, 180, 55);
-        close = new JButton("Close");
-        close.setBounds(220, 490, 180, 55);
-        add(save);
-        add(close);
+        close = new JButton("Close"); close.setBounds(220, 490, 180, 55);
         save.addActionListener(this);
         close.addActionListener(this);
         paintText();
+
+        add(save);
+        add(close);
+
+        setFont(new Font("Serif", Font.BOLD, 42));
 
         setVisible(true);
     }
@@ -94,9 +98,12 @@ public class EventInterface extends JFrame implements ActionListener {
         g.fillRect(0, 0, getWidth(), 100); 
 
         //Now we draw the title text
-        setFont(new Font("Serif", Font.BOLD, 42)); 
         g.setColor(Color.WHITE); 
-        g.drawString("Add Event", 10, 90); 
+        if (event.getTitle().equals("")) {
+            g.drawString("Add Event", 10, 90); 
+        } else {
+            g.drawString("Edit Event", 10, 90);
+        }
     }
 
     /**paintText
@@ -105,24 +112,79 @@ public class EventInterface extends JFrame implements ActionListener {
      */
 
     public void paintText() {
+        boolean newEvent = false; //Tells whether the event already exists
+
         //Perform Text box operations
+        //Title box
+        String titleText = event.getTitle();
+        if (newEvent) {
+            titleText = "Event Title";
+        }
         Font textFont = new Font("Serif", Font.PLAIN, 20);  
-        title = new JTextField(event.getTitle());  
+        title = new JTextField(titleText);
         title.setBounds(10, 80, 180, 35);  
         title.setFont(textFont);  
-        date = new JTextField(event.getDate()); 
+
+        //Date box
+        String eventDate = "";
+        if (newEvent) {
+            eventDate = "mm/dd/yy";
+        } else {
+            eventDate += Integer.toString(event.getStart().getMonth() + 1);
+            eventDate += "/";
+            eventDate += Integer.toString(event.getStart().getDate());
+            eventDate += "/";
+            eventDate += Integer.toString(event.getStart().getYear() + 1900);
+        }
+        date = new JTextField(eventDate);
         date.setBounds(10, 135, 180, 35);
         date.setFont(textFont);
-        start = new JTextField(event.getStart());
+
+        //Start Time box
+        String startTime = "";
+        if (newEvent) {
+            startTime = "Start: hh:mm";
+        } else {
+            startTime += Integer.toString(event.getStart().getHours());
+            startTime += ":";
+            startTime += Integer.toString(event.getStart().getMinutes());
+        }
+        start = new JTextField(startTime);
         start.setBounds(210, 135, 180, 35);
         start.setFont(textFont);
-        end = new JTextField(event.getEnd());
+
+        //End Time box
+        String endTime = "";
+        if (newEvent) {
+            endTime = "End: hh:mm";
+        } else {
+            endTime += Integer.toString(event.getEnd().getHours());
+            endTime += ":";
+            endTime += Integer.toString(event.getEnd().getMinutes());
+        }
+        end = new JTextField(endTime);
         end.setBounds(400, 135, 180, 35);
         end.setFont(textFont);
-        location = new JTextField(event.getLocation()); 
+
+        //Location box
+        String loc = "";
+        if (newEvent) {
+            loc = "Location";
+        } else {
+            loc = event.getLocation();
+        }
+        location = new JTextField(loc);
         location.setBounds(10, 190, 180, 35);
         location.setFont(textFont);
-        description = new JTextArea(event.getDesc()); 
+
+        //Description box
+        String desc = "";
+        if (newEvent) {
+            desc = "Description";
+        } else {
+            desc = event.getDesc();
+        }
+        description = new JTextArea(desc);
         description.setBounds(11, 246, 569, 225);
         description.setFont(textFont);
         description.setLineWrap(true);
@@ -154,13 +216,38 @@ public class EventInterface extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save) {
-            event.changeTitle(title.getText());
-            event.changeDate(date.getText());
-            event.changeStart(start.getText());
-            event.changeEnd(end.getText());
-            event.changeLocation(location.getText());
-            event.changeDesc(description.getText());
-            //TODO connect to data classes and dispose
+            //Convert the date into 3 strings
+            String day = date.getText();
+            String startTime = start.getText();
+            String endTime = end.getText();
+            if (startTime.charAt(2) != ':' || endTime.charAt(2) != ':') {
+                JOptionPane.showMessageDialog(null, "Invalid input");
+            }
+            try {
+                int month = Integer.parseInt(day.substring(0,1));
+                int dayNum = Integer.parseInt(day.substring(3,5));
+                int year = Integer.parseInt(day.substring(6,10));
+                int startHour = Integer.parseInt(startTime.substring(0,1));
+                int startMin = Integer.parseInt(startTime.substring(3,5));
+                int endHour = Integer.parseInt(endTime.substring(0,1));
+                int endMin = Integer.parseInt(endTime.substring(3,5));
+                event.changeStart(new Date(year, month, dayNum, startHour, startMin));
+                event.changeEnd(new Date(year, month, dayNum, endHour, endMin));
+                event.changeTitle(title.getText());
+                event.changeDesc(description.getText());
+                event.changeLocation(location.getText());
+
+                //Store event and dispose
+                if (newEvent) {
+                    ctrl.add(event);
+                } else {
+                    //TODO set info to new event object
+                }
+                dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Invalid input");
+            }
+            
         } else if (e.getSource() == close) {
             if (hasClosed) dispose();
             else {
