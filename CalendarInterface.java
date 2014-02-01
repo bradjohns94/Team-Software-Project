@@ -1,8 +1,7 @@
 /**CalendarInterface
  * @author Bradley Johns
  * @author Nathan Jackels
- * The general interface of the calendar that shows a month,
- * week, or day view. Comes equipped with a control panel
+ * The general interface of the calendar that shows a month, * week, or day view. Comes equipped with a control panel
  * that allows access to other options such as adding or
  * removing events, or going to a specified date.
  */
@@ -13,7 +12,7 @@ import java.awt.Font.*;
 import javax.swing.*;
 import java.applet.Applet;
 import java.awt.Font.*;
-import java.util.Date;
+import java.util.*;
 import java.awt.geom.Rectangle2D;
 
 // <applet width="1500" height="750" code="CalendarInterface.class"> Applet </applet>
@@ -23,6 +22,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
     private Date selected;
     private int view; //0 for month, 1 for week, 2 for day
     private Image picture;
+    private EventData[] events;
 
     private JButton next;
     private JButton last;
@@ -33,7 +33,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
     private JButton monthView;
     private JTextField go;
     private int viewCord = -1; //Chooses the location of monthview button
-private Control ctrl;
+    private Control ctrl;
 
     /**init
      * First method called when opening calendar application
@@ -49,6 +49,8 @@ private Control ctrl;
         view = 0;
         
         picture = getImage(getCodeBase(), "HAL.png");
+        events = ctrl.getAllEvents();
+        sortEvents();
 
         int startX = getWidth() / 3;
         int width = ((getWidth() - (getWidth() / 3)) / 7) - 2;
@@ -99,7 +101,7 @@ private Control ctrl;
         setBackground(Color.BLACK);
         g.setColor(Color.CYAN);
 
-        int width = (2 * (getWidth() / 3)) / 7;
+        int width = ((getWidth() - (getWidth() / 3)) / 7) - 2;
 
         if (view == 1) {
             viewCord = (getWidth() / 3) + (2 * width) + 5;
@@ -191,16 +193,17 @@ private Control ctrl;
 
         //Highlight the Selected Day
         g.setColor(new Color(0x660000));
-        int width = ((2 * (getWidth() / 3)) / 2) - 3;
+        int width = getWidth() / 3;
+        int height = (getHeight() - (getHeight() / 10)) / 3;
         if (selected.getDay() < 5) {
-            int highlightX = (getWidth() / 3) + 1 + (497 * (selected.getDay() % 2));
-            int highlightY = 79 + (224 * (selected.getDay() / 2));
-            g.fillRect(highlightX, highlightY, 495, 222);
+            int highlightX = (getWidth() / 3) + 1 + (width * (selected.getDay() % 2));
+            int highlightY = (getHeight() / 10) + (height * (selected.getDay() / 2));
+            g.fillRect(highlightX, highlightY, width - 2, height - 2);
         } else {
-            int highlightX = 1004;
-            int highlightY = 527;
-            if (selected.getDay() == 6) highlightY += 112;
-            g.fillRect(highlightX, highlightY, 495, 110);
+            int highlightX = (2 * width) + 1;
+            int highlightY = (getHeight() / 10) + (2 * height) + 1;
+            if (selected.getDay() == 6) highlightY += (height / 2);
+            g.fillRect(highlightX, highlightY, width - 2, (height / 2) - 2);
         }
 
         //Draw day-specific text
@@ -211,11 +214,11 @@ private Control ctrl;
             String date = current.toString().substring(0, 10);
             date += current.toString().substring(23, 28);
             Rectangle2D textBlock = metrics.getStringBounds(date, g);
-            int textX = 510 + (497 * (i % 2));
-            int textY = 79 + (224 * (i / 2));
+            int textX = (getWidth() / 3) + 4 + (width * (i % 2));
+            int textY = (getHeight() / 10) + 1 + (height * (i / 2));
             if (i == 6) {
-                textX += 497;
-                textY -= 112;
+                textX += width;
+                textY -= (height / 2);
             }
             textY += textBlock.getHeight();
             g.drawString(date, textX, textY);
@@ -232,33 +235,46 @@ private Control ctrl;
 
     private void drawMonth(Graphics g) {
         FontMetrics metrics = g.getFontMetrics();
-	    int startX = 506; //Coordinates decided for even 7x7 grid
-        int startY =  78;
+	    int startX = getWidth() / 3; //Coordinates decided for even 7x7 grid
+        int startY =  getHeight() / 10;
+        int sizeX = (2 * getWidth()) / 3;
+        int sizeY = (9 * getHeight()) / 10;
+        int monthLine = (getHeight() / 10) + (sizeY / 14);
+
         for (int i = 0; i < 6; i++) {
-            int currentX = startX + (142 * (i + 1));
-            int currentY = startY + (96 * (i + 1));
-            g.drawLine(startX, currentY, 1500, currentY);
-            g.drawLine(currentX, 126, currentX, 750);
+            int currentX = startX + ((sizeX / 7) * (i + 1));
+            int currentY = startY + ((sizeY / 7) * (i + 1));
+            g.drawLine(startX, currentY, getWidth(), currentY);
+            g.drawLine(currentX, monthLine, currentX, getHeight());
         }
-        g.drawLine(startX, 126, 1500, 126);
+        g.drawLine(startX, monthLine, getWidth(), monthLine);
 
         //Highlight Selected Day
         g.setColor(new Color(0x660000));
         Date first = new Date(selected.getYear(), selected.getMonth(), 1);
-        int highlightX = 507 + (142 * selected.getDay());
-        int highlightY = 175 + (getRow(selected, first.getDay()) * 96);
-        g.fillRect(highlightX, highlightY, 141, 95);
+        int highlightX = (getWidth() / 3) + 1 + ((sizeX / 7) * selected.getDay());
+        int highlightY = (getHeight() / 10) + 1 + (sizeY / 7) + (getRow(selected, first.getDay()) * (sizeY / 7));
+        g.fillRect(highlightX, highlightY, (sizeX / 7) - 1, (sizeY / 7) - 1);
 
-        //Draw day numbers
+        //Draw day numbers and if there are events on the given day
         g.setColor(Color.WHITE);
         Date current = new Date(selected.getYear(), selected.getMonth(), 1);
         while (current.getMonth() == selected.getMonth()) {
             Rectangle2D textBlock = metrics.getStringBounds(Integer.toString(current.getDate() + 1), g);
             first = new Date(current.getYear(), current.getMonth(), 1);
-            int textX = 510 + (142 * current.getDay());
-            int textY = 175 + (getRow(current, first.getDay()) * 96);
+            int textX = (getWidth() / 3) + 4 + ((sizeX / 7) * current.getDay());
+            int textY = (getHeight() / 10) + (sizeY / 7) + 1 + (getRow(current, first.getDay()) * (sizeY / 7));
             textY += textBlock.getHeight();
             g.drawString(Integer.toString(current.getDate()), textX, textY);
+
+            textBlock = metrics.getStringBounds("Events Scheduled", g);
+            textY += (sizeY / 7) / 2;
+            textY += textBlock.getHeight();
+            if (findDay(current).length != 0) {
+                g.setColor(Color.GREEN);
+                g.drawString("Events Scheduled", textX, textY);
+                g.setColor(Color.WHITE);
+            }
             current = getNext(current);
         }
 
@@ -291,8 +307,8 @@ private Control ctrl;
                     break;
             }
             Rectangle2D textBlock = metrics.getStringBounds(day, g);
-            int textX = 577 + (142 * i) - (int)(textBlock.getWidth() / 2);
-            int textY = 150 + (int)(textBlock.getHeight() / 2);
+            int textX = startX + (sizeX / 14) + ((sizeX / 7) * i) - (int)(textBlock.getWidth() / 2);
+            int textY = startY + ((3 * (sizeY / 7)) / 4) + (int)(textBlock.getHeight() / 2);
             g.drawString(day, textX, textY);
         }
 
@@ -338,8 +354,8 @@ private Control ctrl;
         }
         month += ", " + Integer.toString(selected.getYear() + 1900);
         Rectangle2D textBlock = metrics.getStringBounds(month, g);
-        int textX = 1003 - (int)(textBlock.getWidth() / 2);
-        int textY = 102 + (int)(textBlock.getHeight() / 2);
+        int textX = (2 * startX) - (int)(textBlock.getWidth() / 2);
+        int textY = startY + ((sizeY / 7) / 4) + (int)(textBlock.getHeight() / 2);
         g.drawString(month, textX, textY);
     }
 
@@ -423,6 +439,67 @@ private Control ctrl;
         view = newView;
     }
 
+    public void update() {
+        events = ctrl.getAllEvents();
+        sortEvents();
+        repaint();
+    }
+
+    public void sortEvents() {
+        EventData[] newEvents = new EventData[events.length];
+        for (int i = 0; i < events.length; i++) {
+            int index = binarySearch(0, i, newEvents, events[i].getStart());
+            for (int j = i; j > index; j--) {
+                newEvents[j] = newEvents[j - 1];
+            }
+            newEvents[index] = events[i];
+        }
+        events = newEvents;
+    }
+
+    private EventData[] findDay(Date day) {
+        EventData[] onDay = new EventData[events.length];
+        EventData[] returnArray = new EventData[0];
+        int index = binarySearch(0, events.length, events, day);
+        int i = 0;
+        
+        //Add all events on same day into array, in order
+        while (index < events.length &&
+               areSameDay(day, events[index].getStart())) {
+            onDay[i] = events[index];
+            i++;
+            index++;
+        }
+
+        //Make an array of correct size
+        returnArray = new EventData[i];
+        for (int j = 0; j < i; j++) {
+            returnArray[j] = onDay[j];
+        }
+        return returnArray;
+    }
+
+    private boolean areSameDay(Date day1, Date day2) {
+        if (day1.getDate() != day2.getDate()) return false;
+        if (day1.getMonth() != day2.getMonth()) return false;
+        return (day1.getYear() == day2.getYear());
+    }
+
+    public int binarySearch(int start, int end, EventData[] array, Date event) {
+        if (end - start < 1) return start;
+        int mid = start + ((end - start) / 2);
+        if (mid == end) return end;
+        Date atMid = array[mid].getStart();
+        if (event.compareTo(atMid) > 0) {
+            start = mid + 1;
+            return binarySearch(start, end, array, event);
+        } else if (event.compareTo(atMid) < 0) {
+            end = mid;
+            return binarySearch(start, end, array, event);
+        }
+        return mid;
+    }
+        
     /**actionPerformed
      * Handles all cases when one of the buttons used to change
      * the interface of the calendar is pressed
@@ -467,7 +544,7 @@ private Control ctrl;
             view = 0;
             remove(monthView);
         } else if (e.getSource() == addEvent) { //Goto the addEvent page
-            EventInterface iface = new EventInterface(ctrl);
+            EventInterface iface = new EventInterface(ctrl, this);
             iface.init();
             iface.setVisible(true);
         }
@@ -507,11 +584,14 @@ private Control ctrl;
     public void mouseClicked(MouseEvent e) {
         int xCord = e.getX();
         int yCord = e.getY();
+        int rowHeight = (9 * (getHeight() / 10)) / 7;
+        int yDif = yCord - ((getHeight() / 10) + ((9 * (getHeight() / 10)) / 7));
+        int xDif = xCord - (getWidth() / 3);
         if (view == 0) {
-            if (xCord > 506 && yCord > 174) {
+            if (xCord > (getWidth() / 3) && yCord > (getHeight() / 10) + rowHeight) {
                 int first = (new Date(selected.getYear(), selected.getMonth(), 1)).getDay();
-                int row = (yCord - 175) / 96;
-                int col = (xCord - 506) / 142;
+                int row = yDif / ((9 * (getHeight() / 10)) / 7); 
+                int col = xDif / ((2 * (getWidth() / 3)) / 7);
                 int day = 1 + (7 * row);
                 day += (col - first);
                 Date newSelected = new Date(selected.getYear(), selected.getMonth(), day);
