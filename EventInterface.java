@@ -27,6 +27,7 @@ public class EventInterface extends JFrame implements ActionListener {
 
     private boolean newEvent;
     private Control ctrl;
+    private CalendarInterface cal;
 
     //For the HAL joke
     private boolean hasClosed; //This is terrible practice
@@ -36,11 +37,12 @@ public class EventInterface extends JFrame implements ActionListener {
      * a brand new event instead of altering a pre-existing one
      */
 
-    public EventInterface(Control toSend) {
+    public EventInterface(Control toSend, CalendarInterface iface) {
         super("Add Event");
         event = new EventData();
         ctrl = toSend;
         newEvent = true;
+        cal = iface;
     }
 
     /**EventInterface Constructor 2
@@ -49,10 +51,12 @@ public class EventInterface extends JFrame implements ActionListener {
      * @param e the event that is being altered
      */
 
-    public EventInterface(EventData e, Control toSend) {
+    public EventInterface(EventData e, Control toSend, CalendarInterface iface) {
         super(e.getTitle()); 
         event = e;
-        ctrl = toSend; newEvent = false; } 
+        ctrl = toSend; newEvent = false; 
+        cal = iface;
+    } 
     /**init
      * Initializes the GUI with text boxes and buttons
      */
@@ -112,8 +116,6 @@ public class EventInterface extends JFrame implements ActionListener {
      */
 
     public void paintText() {
-        boolean newEvent = false; //Tells whether the event already exists
-
         //Perform Text box operations
         //Title box
         String titleText = event.getTitle();
@@ -220,29 +222,33 @@ public class EventInterface extends JFrame implements ActionListener {
             String day = date.getText();
             String startTime = start.getText();
             String endTime = end.getText();
+            EventData nEvent = event;
             if (startTime.charAt(2) != ':' || endTime.charAt(2) != ':') {
                 JOptionPane.showMessageDialog(null, "Invalid input");
             }
             try {
-                int month = Integer.parseInt(day.substring(0,1));
+                int month = Integer.parseInt(day.substring(0,2));
                 int dayNum = Integer.parseInt(day.substring(3,5));
                 int year = Integer.parseInt(day.substring(6,10));
                 int startHour = Integer.parseInt(startTime.substring(0,1));
                 int startMin = Integer.parseInt(startTime.substring(3,5));
                 int endHour = Integer.parseInt(endTime.substring(0,1));
                 int endMin = Integer.parseInt(endTime.substring(3,5));
-                event.changeStart(new Date(year, month, dayNum, startHour, startMin));
-                event.changeEnd(new Date(year, month, dayNum, endHour, endMin));
-                event.changeTitle(title.getText());
-                event.changeDesc(description.getText());
-                event.changeLocation(location.getText());
+                year -= 1900;
+                month -= 1;
+                nEvent.changeStart(new Date(year, month, dayNum, startHour, startMin));
+                nEvent.changeEnd(new Date(year, month, dayNum, endHour, endMin));
+                nEvent.changeTitle(title.getText());
+                nEvent.changeDesc(description.getText());
+                nEvent.changeLocation(location.getText());
 
                 //Store event and dispose
                 if (newEvent) {
-                    ctrl.add(event);
+                    ctrl.add(nEvent);
                 } else {
-                    //TODO set info to new event object
+                    ctrl.editEvent(event, nEvent);
                 }
+                cal.update();
                 dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Invalid input");
