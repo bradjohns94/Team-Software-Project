@@ -250,11 +250,11 @@ public class EventData {
      * H:MM: AM M/DD/YY
      * 
      */
-    private void toDate(String e){
+   // private void toDate(String e){
     	//TODO--------------------------------------------
     	
     	
-    }
+   // }
 
     /**changeEnd
      * Changes the end time of the event
@@ -331,5 +331,6 @@ public class EventData {
     	result[0] = "<Desc>(" + this.getDesc() + ")";
     	result[1] = "<" + this.getLocation() + ")";
     	result[2] = "<" + this.getTitle() + ")";
+	return result;
     }
 }

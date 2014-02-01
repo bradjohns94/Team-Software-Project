@@ -177,7 +177,7 @@ private Control ctrl;
      * when the calendar has been set to week-view
      * @param g the graphics object to draw the view
      */
-
+    @SuppressWarnings("deprecation")
     private void drawWeek(Graphics g) {
         FontMetrics metrics = g.getFontMetrics();
         int mid = 2 * (getWidth() / 3);
@@ -229,7 +229,7 @@ private Control ctrl;
      * when the calendar has been set to month-view
      * @param g the graphics object to draw the view
      */
-
+    @SuppressWarnings("deprecation")
     private void drawMonth(Graphics g) {
         FontMetrics metrics = g.getFontMetrics();
 	    int startX = 506; //Coordinates decided for even 7x7 grid
@@ -350,7 +350,7 @@ private Control ctrl;
      * @param firstOfMonth the day of the week value of the first day of the month
      * @return the integer representation (0 indexed) of what row the day goes in
      */
-
+    @SuppressWarnings("deprecation")
     private static int getRow(Date day, int firstOfMonth) {
         return (((firstOfMonth - 1) + day.getDate()) / 7);
     }
@@ -360,7 +360,7 @@ private Control ctrl;
      * @param day the day before what is returned
      * @return the day after the given parameter
      */
-
+    @SuppressWarnings("deprecation")
     private static Date getNext(Date day) {
         int dayNum = day.getDate();
         int month = day.getMonth();
@@ -390,7 +390,7 @@ private Control ctrl;
      * @param day the day after what is returned
      * @return the day before the given parameter
      */
-
+    @SuppressWarnings("deprecation")
     private static Date getLast(Date day) {
         int dayNum = day.getDate();
         int month = day.getMonth();
@@ -428,7 +428,7 @@ private Control ctrl;
      * the interface of the calendar is pressed
      * @param e the event object containing information on what occurred
      */
-
+    @SuppressWarnings("deprecation")
     public void actionPerformed(ActionEvent e) {
         int currentMonth = selected.getMonth();
         if (e.getSource() == next) { //Goto next view
@@ -481,9 +481,9 @@ private Control ctrl;
      * the goto text box
      * @param e the event object containing information on what occurred
      */
-
+    @SuppressWarnings("deprecation")
     public void keyPressed(KeyEvent e) { 
-        if (e.getKeyCode() == e.VK_ENTER) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             String date = go.getText();
             if (date.charAt(2) != '/' || date.charAt(5) != '/') {
                 JOptionPane.showMessageDialog(null, "Invalid input");
@@ -504,6 +504,7 @@ private Control ctrl;
     }
     public void keyTyped(KeyEvent e) { }
 
+    @SuppressWarnings("deprecation")
     public void mouseClicked(MouseEvent e) {
         int xCord = e.getX();
         int yCord = e.getY();
