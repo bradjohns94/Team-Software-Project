@@ -53,26 +53,26 @@ public class EventData {
      * @param data The array of data that will define the new event. For order of data, see parameterOrder()
      */
     public EventData(String[] data){
-    	int size = 0;
-    	if(data.length > parameterOrder().length){
-    		size = parameterOrder().length;
-    	} else {
-    		size = data.length;
-    	}
-    	switch(size){
-    	case 5:
-    		this.title = data[4];
-    	case 4:
-    		this.desc = data[3];
-    	case 3:
-    		this.startTime = toDate(data[2]);
-    	case 2:
-    		this.endTime = toDate(data[1]);
-    	case 1:
-    		this.location = data[0];
-    	case 0:
-    	default:
-    	}
+            int size = 0;
+            if(data.length > parameterOrder().length){
+                    size = parameterOrder().length;
+            } else {
+                    size = data.length;
+            }
+            switch(size){
+            case 5:
+                    this.title = data[4];
+            case 4:
+                    this.desc = data[3];
+            case 3:
+                    this.startTime = toDate(data[2]);
+            case 2:
+                    this.endTime = toDate(data[1]);
+            case 1:
+                    this.location = data[0];
+            case 0:
+            default:
+            }
     }
     
     /**toDate
@@ -81,56 +81,56 @@ public class EventData {
      * 
      */
     @SuppressWarnings("deprecation")
-	private Date toDate(String date) {
-    	Date result = new Date();
-		result.setHours(toInt(date.substring(11,13)));
-		result.setMinutes(toInt(date.substring(14,16)));
-		result.setDate(toInt(date.substring(8,10)));
-		result.setYear(toInt(date.substring(24,28)) - 1900);
-		String month = date.substring(4,7);
-		switch(month){
-		case("Jan"):
-			result.setMonth(0);
-			break;
-		case("Feb"):
-			result.setMonth(1);
-			break;
-		case("Mar"):
-			result.setMonth(2);
-			break;
-		case("Apr"):
-			result.setMonth(3);
-			break;
-		case("May"):
-			result.setMonth(4);
-			break;
-		case("Jun"):
-			result.setMonth(5);
-			break;
-		case("Jul"):
-			result.setMonth(6);
-			break;
-		case("Aug"):
-			result.setMonth(7);
-			break;
-		case("Sep"):
-			result.setMonth(8);
-			break;
-		case("Oct"):
-			result.setMonth(9);
-			break;
-		case("Nov"):
-			result.setMonth(10);
-			break;
-		case("Dec"):
-			result.setMonth(11);
-			break;
-		default:
-			result.setMonth(0);
-		}
-		result.setSeconds(0);
-		return result;
-	}
+        private Date toDate(String date) {
+            Date result = new Date();
+                result.setHours(toInt(date.substring(11,13)));
+                result.setMinutes(toInt(date.substring(14,16)));
+                result.setDate(toInt(date.substring(8,10)));
+                result.setYear(toInt(date.substring(24,28)) - 1900);
+                String month = date.substring(4,7);
+                switch(month){
+                case("Jan"):
+                        result.setMonth(0);
+                        break;
+                case("Feb"):
+                        result.setMonth(1);
+                        break;
+                case("Mar"):
+                        result.setMonth(2);
+                        break;
+                case("Apr"):
+                        result.setMonth(3);
+                        break;
+                case("May"):
+                        result.setMonth(4);
+                        break;
+                case("Jun"):
+                        result.setMonth(5);
+                        break;
+                case("Jul"):
+                        result.setMonth(6);
+                        break;
+                case("Aug"):
+                        result.setMonth(7);
+                        break;
+                case("Sep"):
+                        result.setMonth(8);
+                        break;
+                case("Oct"):
+                        result.setMonth(9);
+                        break;
+                case("Nov"):
+                        result.setMonth(10);
+                        break;
+                case("Dec"):
+                        result.setMonth(11);
+                        break;
+                default:
+                        result.setMonth(0);
+                }
+                result.setSeconds(0);
+                return result;
+        }
     
     /**toInt
      * A method that converts the last 4 characters in a given string into an integer.
@@ -139,74 +139,74 @@ public class EventData {
      * Notes: Any invalid characters will be treated as a '0'.
      */
     public static int toInt(String e){
-		char[] input = e.toCharArray();
-		char[] word = {'0','0','0','0'};
-		int inputIndex = input.length-1;
-		int wordIndex = 3;
-		while((wordIndex >= 0) && (inputIndex >= 0)){
-			word[wordIndex] = input[inputIndex];
-			wordIndex--;
-			inputIndex--;
-		}
-		int result = 0;
-		int[] temp = new int[4];
-		for(int i = 0; i < 4; i++){
-			switch(word[i]){
-			case('9'):
-				temp[i] = 9;
-			    break;
-			case('8'):
-				temp[i] = 8;
-		    	break;
-			case('7'):
-				temp[i] = 7;
-		    	break;
-			case('6'):
-				temp[i] = 6;
-		    	break;
-			case('5'):
-				temp[i] = 5;
-		    	break;
-			case('4'):
-				temp[i] = 4;
-		    	break;
-			case('3'):
-				temp[i] = 3;
-		    	break;
-			case('2'):
-				temp[i] = 2;
-		    	break;
-			case('1'):
-				temp[i] = 1;
-		    	break;
-			case('0'):
-				temp[i] = 0;
-			default:
-			}
-		}
-		result += temp[3];
-		result += (10*temp[2]);
-		result += (100*temp[1]);
-		result += (1000*temp[0]);
-		return result;
-	}
+                char[] input = e.toCharArray();
+                char[] word = {'0','0','0','0'};
+                int inputIndex = input.length-1;
+                int wordIndex = 3;
+                while((wordIndex >= 0) && (inputIndex >= 0)){
+                        word[wordIndex] = input[inputIndex];
+                        wordIndex--;
+                        inputIndex--;
+                }
+                int result = 0;
+                int[] temp = new int[4];
+                for(int i = 0; i < 4; i++){
+                        switch(word[i]){
+                        case('9'):
+                                temp[i] = 9;
+                            break;
+                        case('8'):
+                                temp[i] = 8;
+                            break;
+                        case('7'):
+                                temp[i] = 7;
+                            break;
+                        case('6'):
+                                temp[i] = 6;
+                            break;
+                        case('5'):
+                                temp[i] = 5;
+                            break;
+                        case('4'):
+                                temp[i] = 4;
+                            break;
+                        case('3'):
+                                temp[i] = 3;
+                            break;
+                        case('2'):
+                                temp[i] = 2;
+                            break;
+                        case('1'):
+                                temp[i] = 1;
+                            break;
+                        case('0'):
+                                temp[i] = 0;
+                        default:
+                        }
+                }
+                result += temp[3];
+                result += (10*temp[2]);
+                result += (100*temp[1]);
+                result += (1000*temp[0]);
+                return result;
+        }
 
     /**parameterOrder
      * This method assists the DataStorage class by giving it the order of the parameters being saved.
      * @return An ordered list of short representations of the data associated with an Event being stored.
      */
-	protected static String[] parameterOrder(){
-    	String[] result = {"Title","Desc","StartT","EndT","Loc"};
-    	return result;
+        protected static String[] parameterOrder(){
+            String[] result = {"Title","Desc","StartT","EndT","Loc"};
+            return result;
     }
     
     /**dataOrdered
      * This method is specifically used by the DataStorage class to get all the data associated with an Event that needs to be stored.
      * @return An ordered list of string representations of the data associated with an Event.
      */
-    protected String[] dataOrdered(){	//TODO ADD
-    	String[] result = {title, desc, startTime.toString(), endTime.toString(), location};
-    	return result;
+    protected String[] dataOrdered(){        //TODO ADD
+            String[] result = {title, desc, startTime.toString(), endTime.toString(), location};
+            return result;
     }
 
     /**changeTitle
@@ -238,7 +238,7 @@ public class EventData {
     
     
     public void changeStart(String newStart){
-    	startTime = toDate(newStart);
+            startTime = toDate(newStart);
     }
     
     /**toDate
@@ -250,11 +250,11 @@ public class EventData {
      * H:MM: AM M/DD/YY
      * 
      */
-    private void toDate(String e){
-    	//TODO--------------------------------------------
-    	
-    	
-    }
+    //private void toDate(String e){
+            //TODO--------------------------------------------
+            
+            
+    //}
 
     /**changeEnd
      * Changes the end time of the event
@@ -266,7 +266,7 @@ public class EventData {
     }
     
     public void changeEnd(String newEnd){
-    	endTime = toDate(newEnd);
+            endTime = toDate(newEnd);
     }
 
     /**changeLocation
@@ -327,9 +327,10 @@ public class EventData {
      * @return An array of DataDescription, and it's corresponding Data.
      */
     public String[] getSaveData(){
-    	String[] result = new String[5];
-    	result[0] = "<Desc>(" + this.getDesc() + ")";
-    	result[1] = "<" + this.getLocation() + ")";
-    	result[2] = "<" + this.getTitle() + ")";
+            String[] result = new String[5];
+            result[0] = "<Desc>(" + this.getDesc() + ")";
+            result[1] = "<" + this.getLocation() + ")";
+            result[2] = "<" + this.getTitle() + ")";
+            return result;
     }
 }

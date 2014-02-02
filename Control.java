@@ -112,4 +112,12 @@ public class Control {
 		}
 		return results;
 	}
+
+    public EventData[] getAllEvents(){
+        EventData[] data = new EventData[events.size()];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = events.get(i);
+        }
+        return data;
+    }
 }

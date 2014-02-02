@@ -38,7 +38,7 @@ public class DataStorage {
 	 */
 	public ArrayList<EventData> loadData() {
 		ArrayList<EventData> result = new ArrayList<EventData>();
-        Scanner file;
+        Scanner file = null;
         try {
             file = new Scanner(new File("./CalendarData.data"));
         } catch (Exception e) {}
