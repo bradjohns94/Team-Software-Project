@@ -15,9 +15,8 @@ public class DataStorage {
 	 * This constructor loads data if the file is present, and creates the file otherwise.
 	 */
 	public DataStorage(){
-		Scanner file;
 		try {
-			file = new Scanner(new File("./CalendarData.data"));
+			Scanner file = new Scanner(new File("./CalendarData.data"));
 		} catch (FileNotFoundException e) {
 			//File doesn't exist, create it.
 			File newFile = new File("./CalendarData.data");
@@ -38,6 +37,7 @@ public class DataStorage {
 	 */
 	public ArrayList<EventData> loadData() {
 		ArrayList<EventData> result = new ArrayList<EventData>();
+<<<<<<< HEAD
         Scanner file = null;
         try {
             file = new Scanner(new File("./CalendarData.data"));
@@ -57,20 +57,40 @@ public class DataStorage {
 					for(int j = 0; j < parameters.length; j++){
 						if(parameters[j].equals(param)){
 							data[j] = temp.substring(temp.indexOf('(') + 1, temp.indexOf(')'));
+=======
+        	try {
+        		Scanner file = new Scanner(new File("./CalendarData.data"));
+			String input = "";
+			String[] parameters = EventData.parameterOrder();
+			while(file.hasNext()){
+				input = file.nextLine();
+				if((input.toCharArray()[0] == '@')){
+					String[] data = new String[parameters.length];	//Retrieve Data parameters
+					for(int i = 0; i < data.length; i++){
+						data[i] = null;		//Used to check for valid entrys later
+					}
+					for(int i = 0; i < parameters.length; i++){	//Data is loaded from file
+						String temp = file.nextLine();
+						String param = temp.substring(temp.indexOf('<')+1,temp.indexOf('>'));
+						for(int j = 0; j < parameters.length; j++){
+							if(parameters[j].equals(param)){
+								data[j] = temp.substring(temp.indexOf('(') + 1, temp.indexOf(')'));
+							}
+>>>>>>> 7782c87daa11e3c6905962b8c5226930c388658f
 						}
 					}
-				}
-				boolean validData = true;
-				for(int i = 0; i < data.length; i++){	//Data is checked for missing information
-					if(data[i] == null){
-						validData = false;
+					boolean validData = true;
+					for(int i = 0; i < data.length; i++){	//Data is checked for missing information
+						if(data[i] == null){
+							validData = false;
+						}
+					}
+					if(validData){		//If entry is complete, it is recorded for later use
+						result.add(new EventData(data));
 					}
 				}
-				if(validData){		//If entry is complete, it is recorded for later use
-					result.add(new EventData(data));
-				}
 			}
-		}
+	        } catch (Exception e) {}
 		return result;
 	}
 	

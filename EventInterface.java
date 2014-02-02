@@ -114,7 +114,7 @@ public class EventInterface extends JFrame implements ActionListener {
      * an extension of init that sets the starting parameters
      * for the text boxes
      */
-
+    @SuppressWarnings("deprecation")
     public void paintText() {
         //Perform Text box operations
         //Title box
@@ -215,7 +215,7 @@ public class EventInterface extends JFrame implements ActionListener {
      * the buttons is clicked
      * @param e the event of one of the buttons being pressed
      */
-
+    @SuppressWarnings("deprecation")
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save) {
             //Convert the date into 3 strings

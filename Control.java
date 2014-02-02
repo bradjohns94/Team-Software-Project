@@ -113,6 +113,7 @@ public class Control {
 		return results;
 	}
 
+<<<<<<< HEAD
     public EventData[] getAllEvents(){
         EventData[] data = new EventData[events.size()];
         for (int i = 0; i < data.length; i++) {
@@ -120,4 +121,9 @@ public class Control {
         }
         return data;
     }
+=======
+	public EventData[] getAllEvents(){
+		return (EventData[])(events.toArray());
+	}
+>>>>>>> 7782c87daa11e3c6905962b8c5226930c388658f
 }
