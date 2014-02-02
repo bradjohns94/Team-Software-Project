@@ -37,14 +37,13 @@ public class DataStorage {
 	 */
 	public ArrayList<EventData> loadData() {
 		ArrayList<EventData> result = new ArrayList<EventData>();
-<<<<<<< HEAD
         Scanner file = null;
         try {
             file = new Scanner(new File("./CalendarData.data"));
         } catch (Exception e) {}
 		String input = "";
 		String[] parameters = EventData.parameterOrder();
-		while(file.hasNext()){
+		while(file.hasNext()) {
 			input = file.nextLine();
 			if((input.toCharArray()[0] == '@')){
 				String[] data = new String[parameters.length];	//Retrieve Data parameters
@@ -57,11 +56,14 @@ public class DataStorage {
 					for(int j = 0; j < parameters.length; j++){
 						if(parameters[j].equals(param)){
 							data[j] = temp.substring(temp.indexOf('(') + 1, temp.indexOf(')'));
-=======
+                        }
+                    }
+                }
+            }
         	try {
-        		Scanner file = new Scanner(new File("./CalendarData.data"));
-			String input = "";
-			String[] parameters = EventData.parameterOrder();
+            file = new Scanner(new File("./CalendarData.data"));
+			input = "";
+			parameters = EventData.parameterOrder();
 			while(file.hasNext()){
 				input = file.nextLine();
 				if((input.toCharArray()[0] == '@')){
@@ -76,7 +78,6 @@ public class DataStorage {
 							if(parameters[j].equals(param)){
 								data[j] = temp.substring(temp.indexOf('(') + 1, temp.indexOf(')'));
 							}
->>>>>>> 7782c87daa11e3c6905962b8c5226930c388658f
 						}
 					}
 					boolean validData = true;
@@ -91,6 +92,7 @@ public class DataStorage {
 				}
 			}
 	        } catch (Exception e) {}
+        }
 		return result;
 	}
 	

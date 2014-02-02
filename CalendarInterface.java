@@ -23,6 +23,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
     private int view; //0 for month, 1 for week, 2 for day
     private Image picture;
     private EventData[] events;
+    private boolean onRemove; //Whether or not the remove button is selected
 
     private JButton next;
     private JButton last;
@@ -169,8 +170,28 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         //Draw the day-specific text
         g.setColor(Color.WHITE);
         Rectangle2D textBlock = metrics.getStringBounds(date, g);
+        int textY = ((getHeight() / 10) + 1) + (int)textBlock.getHeight();
         g.drawString(date, (getWidth() / 3) + 4,
-                    ((getHeight() / 10) + 1) + (int)textBlock.getHeight());
+                    textY);
+
+        //Draw Events on the given day
+        EventData[] onDay = findDay(selected);
+        g.setColor(Color.GREEN);
+        int startY = textY + 1;
+        int ySize = getHeight() - startY;
+        for (int i = 0; i < onDay.length; i++) {
+            String titleText = onDay[i].getTitle();
+            String timeText = onDay[i].getStart().toString().substring(11,16) + " - ";
+            timeText += onDay[i].getEnd().toString().substring(11,16);
+            textBlock = metrics.getStringBounds(titleText, g);
+            int textX = (getWidth() / 3) + 4;
+            textY = startY + ((ySize / 24) * onDay[i].getStart().getHours());
+            textY += textBlock.getHeight();
+            g.drawString(titleText, textX, textY);
+            textY += textBlock.getHeight() + 2;
+            g.drawString(timeText, textX, textY);
+        }
+        g.setColor(Color.WHITE);
     }
 
     /**drawWeek
@@ -197,11 +218,11 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         int height = (getHeight() - (getHeight() / 10)) / 3;
         if (selected.getDay() < 5) {
             int highlightX = (getWidth() / 3) + 1 + (width * (selected.getDay() % 2));
-            int highlightY = (getHeight() / 10) + (height * (selected.getDay() / 2));
+            int highlightY = (getHeight() / 10) + 1 + (height * (selected.getDay() / 2));
             g.fillRect(highlightX, highlightY, width - 2, height - 2);
         } else {
             int highlightX = (2 * width) + 1;
-            int highlightY = (getHeight() / 10) + (2 * height) + 1;
+            int highlightY = (getHeight() / 10) + 1 + (2 * height) + 1;
             if (selected.getDay() == 6) highlightY += (height / 2);
             g.fillRect(highlightX, highlightY, width - 2, (height / 2) - 2);
         }
@@ -547,6 +568,8 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
             EventInterface iface = new EventInterface(ctrl, this);
             iface.init();
             iface.setVisible(true);
+        } else if (e.getSource() == removeEvent) { //Remove the next clicked event
+            onRemove = true;
         }
         repaint();
     }
@@ -601,7 +624,48 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
                 }
                 repaint();
             }
+        } else if (view == 1) {
+            if (xCord >= (getWidth() / 3) && yCord > (getHeight() / 10) + rowHeight) {
+                int ySize = (getHeight() - (getHeight() / 10)) / 3;
+                int xSize = getWidth() / 3;
+                yDif = yCord - (getHeight() / 10);
+                int col = xCord - (getWidth() / 3);
+                int row = yDif / ySize;
+                col /= xSize;
+                int dayNum = (2 * row) + col;
+                if (yDif > (2 * ySize) + (ySize / 2) && col == 1) dayNum++;
+                while (selected.getDay() > dayNum) {
+                    selected = getLast(selected);
+                }
+                while (selected.getDay() < dayNum) {
+                    selected = getNext(selected);
+                }
+                repaint();
+            }
+        } else if (view == 2) {
+            if (xCord > (getWidth() / 3) && yCord > (getHeight() / 10) + rowHeight) {
+                int startY = ((getHeight() / 10) + 1) + 24;
+                int sizeY = getHeight() - startY;
+                int hour = (yCord - startY) / (sizeY / 24);
+                Date toFind = new Date(selected.getYear(), selected.getMonth(), selected.getDay(), hour, 0);
+                int index = binarySearch(0, events.length, events, toFind);
+                while (index < events.length &&
+                       events[index].getStart().getHours() < hour) {
+                    index++;
+                }
+                if (onRemove && index < events.length &&
+                    events[index].getStart().getHours() == hour) {
+                    ctrl.deleteEvent(events[index]);
+                    update();
+                } else if (index < events.length &&
+                           events[index].getStart().getHours() == hour) {
+                    EventInterface iface = new EventInterface(events[index], ctrl, this);
+                    iface.init();
+                    iface.setVisible(true);
+                }
+            }
         }
+        onRemove = false;
     }
 
     public void mouseExited(MouseEvent e) { }

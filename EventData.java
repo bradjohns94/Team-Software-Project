@@ -250,19 +250,16 @@ public class EventData {
      * H:MM: AM M/DD/YY
      * 
      */
-<<<<<<< HEAD
     //private void toDate(String e){
             //TODO--------------------------------------------
             
             
     //}
-=======
    // private void toDate(String e){
     	//TODO--------------------------------------------
     	
     	
    // }
->>>>>>> 7782c87daa11e3c6905962b8c5226930c388658f
 
     /**changeEnd
      * Changes the end time of the event
@@ -335,18 +332,10 @@ public class EventData {
      * @return An array of DataDescription, and it's corresponding Data.
      */
     public String[] getSaveData(){
-<<<<<<< HEAD
-            String[] result = new String[5];
-            result[0] = "<Desc>(" + this.getDesc() + ")";
-            result[1] = "<" + this.getLocation() + ")";
-            result[2] = "<" + this.getTitle() + ")";
-            return result;
-=======
-    	String[] result = new String[5];
-    	result[0] = "<Desc>(" + this.getDesc() + ")";
-    	result[1] = "<" + this.getLocation() + ")";
-    	result[2] = "<" + this.getTitle() + ")";
-	return result;
->>>>>>> 7782c87daa11e3c6905962b8c5226930c388658f
+        String[] result = new String[5];
+        result[0] = "<Desc>(" + this.getDesc() + ")";
+        result[1] = "<" + this.getLocation() + ")";
+        result[2] = "<" + this.getTitle() + ")";
+        return result;
     }
 }

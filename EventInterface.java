@@ -147,9 +147,7 @@ public class EventInterface extends JFrame implements ActionListener {
         if (newEvent) {
             startTime = "Start: hh:mm";
         } else {
-            startTime += Integer.toString(event.getStart().getHours());
-            startTime += ":";
-            startTime += Integer.toString(event.getStart().getMinutes());
+            startTime = event.getStart().toString().substring(11,16);
         }
         start = new JTextField(startTime);
         start.setBounds(210, 135, 180, 35);
@@ -160,9 +158,7 @@ public class EventInterface extends JFrame implements ActionListener {
         if (newEvent) {
             endTime = "End: hh:mm";
         } else {
-            endTime += Integer.toString(event.getEnd().getHours());
-            endTime += ":";
-            endTime += Integer.toString(event.getEnd().getMinutes());
+            endTime = event.getEnd().toString().substring(11,16);
         }
         end = new JTextField(endTime);
         end.setBounds(400, 135, 180, 35);
@@ -230,9 +226,9 @@ public class EventInterface extends JFrame implements ActionListener {
                 int month = Integer.parseInt(day.substring(0,2));
                 int dayNum = Integer.parseInt(day.substring(3,5));
                 int year = Integer.parseInt(day.substring(6,10));
-                int startHour = Integer.parseInt(startTime.substring(0,1));
+                int startHour = Integer.parseInt(startTime.substring(0,2));
                 int startMin = Integer.parseInt(startTime.substring(3,5));
-                int endHour = Integer.parseInt(endTime.substring(0,1));
+                int endHour = Integer.parseInt(endTime.substring(0,2));
                 int endMin = Integer.parseInt(endTime.substring(3,5));
                 year -= 1900;
                 month -= 1;
