@@ -68,10 +68,6 @@ public class DataStorage {
 						}
 					}
 					if(validData){		//If entry is complete, it is recorded for later use
-						System.out.println("Loaded new data.");
-						for(String e : data){
-							System.out.println(e);
-						}
 						result.add(new EventData(data));
 						
 					}
@@ -91,25 +87,20 @@ public class DataStorage {
 	 */
 	protected boolean saveData(ArrayList<EventData> e){
 		File file = new File("./CalendarData.data");
-		System.out.println("In DataStorage.Save()");
 		file.setWritable(true);
 		try{
 			FileWriter out = new FileWriter(file);
 			String[] parameters = EventData.parameterOrder();
-			out.write("Writing Data.");
-			System.out.println("Past First Write");
-			out.close();
-			out = new FileWriter(file);
 			for(EventData t : e){
 				//Write out individual events
 				String[] values = t.dataOrdered();
 				out.write("@\n");
 				for(int i = 0; i < values.length; i++){
-					System.out.println("Wrote a new event.");
 					//Write each individual parameter for the event
 					String outLine = "<" + parameters[i] + ">(" + values[i] + ")\n";
 					out.write(outLine);
 				}
+				System.out.println("Wrote an event.");
 			}
 			out.close();
 		} catch (IOException e1){
