@@ -20,6 +20,7 @@ public class DataStorage {
 		} catch (FileNotFoundException e) {
 			//File doesn't exist, create it.
 			File newFile = new File("./CalendarData.data");
+			newFile.setWritable(true);
 			try {
 				FileWriter out = new FileWriter(newFile);
 				out.close();
@@ -38,30 +39,10 @@ public class DataStorage {
 	public ArrayList<EventData> loadData() {
 		ArrayList<EventData> result = new ArrayList<EventData>();
         Scanner file = null;
-        try {
-            file = new Scanner(new File("./CalendarData.data"));
-        } catch (Exception e) {}
 		String input = "";
 		String[] parameters = EventData.parameterOrder();
-		while(file.hasNext()) {
-			input = file.nextLine();
-			if((input.toCharArray()[0] == '@')){
-				String[] data = new String[parameters.length];	//Retrieve Data parameters
-				for(int i = 0; i < data.length; i++){
-					data[i] = null;		//Used to check for valid entrys later
-				}
-				for(int i = 0; i < parameters.length; i++){	//Data is loaded from file
-					String temp = file.nextLine();
-					String param = temp.substring(temp.indexOf('<')+1,temp.indexOf('>'));
-					for(int j = 0; j < parameters.length; j++){
-						if(parameters[j].equals(param)){
-							data[j] = temp.substring(temp.indexOf('(') + 1, temp.indexOf(')'));
-                        }
-                    }
-                }
-            }
-        	try {
-            file = new Scanner(new File("./CalendarData.data"));
+       	try {
+           	file = new Scanner(new File("./CalendarData.data"));
 			input = "";
 			parameters = EventData.parameterOrder();
 			while(file.hasNext()){
@@ -83,16 +64,23 @@ public class DataStorage {
 					boolean validData = true;
 					for(int i = 0; i < data.length; i++){	//Data is checked for missing information
 						if(data[i] == null){
-							validData = false;
+							//validData = false;
 						}
 					}
 					if(validData){		//If entry is complete, it is recorded for later use
+						System.out.println("Loaded new data.");
+						for(String e : data){
+							System.out.println(e);
+						}
 						result.add(new EventData(data));
+						
 					}
 				}
 			}
-	        } catch (Exception e) {}
-        }
+			file.close();
+        } catch (Exception e) {System.out.println("Exception in DataStorage.loadData()");
+        	e.printStackTrace();
+        	}
 		return result;
 	}
 	
@@ -103,14 +91,21 @@ public class DataStorage {
 	 */
 	protected boolean saveData(ArrayList<EventData> e){
 		File file = new File("./CalendarData.data");
+		System.out.println("In DataStorage.Save()");
+		file.setWritable(true);
 		try{
 			FileWriter out = new FileWriter(file);
 			String[] parameters = EventData.parameterOrder();
+			out.write("Writing Data.");
+			System.out.println("Past First Write");
+			out.close();
+			out = new FileWriter(file);
 			for(EventData t : e){
 				//Write out individual events
 				String[] values = t.dataOrdered();
 				out.write("@\n");
 				for(int i = 0; i < values.length; i++){
+					System.out.println("Wrote a new event.");
 					//Write each individual parameter for the event
 					String outLine = "<" + parameters[i] + ">(" + values[i] + ")\n";
 					out.write(outLine);
