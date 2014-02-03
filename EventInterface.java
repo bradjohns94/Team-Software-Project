@@ -130,7 +130,7 @@ public class EventInterface extends JFrame implements ActionListener {
         //Date box
         String eventDate = "";
         if (newEvent) {
-            eventDate = "mm/dd/yy";
+            eventDate = "mm/dd/yyyy";
         } else {
             eventDate += Integer.toString(event.getStart().getMonth() + 1);
             eventDate += "/";
