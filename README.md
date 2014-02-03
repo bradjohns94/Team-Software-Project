@@ -29,12 +29,13 @@ Navigating the Calendar:
 
 	To view event details, the view must be in Week View or Day View. 
 
-	To navigate to the previous day in Day View or week in Week View or month in Month View, the user should
-	click on the Last button in the upper left. Similarly, to navigate to the next day in Day View or week in
-	Week View or month in Month View, the user should click on the Next button in the upper right.
+	To navigate to the previous day in Day View or week in Week View or month in Month View, the user
+	should click on the Last button in the upper left. Similarly, to navigate to the next day in Day 
+	View or week in	Week View or month in Month View, the user should click on the Next button in
+	the upper right.
 
-	The Goto field is used to go to a date in the calendar. Type in the date that should be included in the
-	view, then press enter. The date must be in the form mm/dd/yyyy.
+	The Goto field is used to go to a date in the calendar. Type in the date that should be included in
+	the	view, then press enter. The date must be in the form mm/dd/yyyy.
 
 Adding Events:
 
@@ -46,27 +47,30 @@ Adding Events:
 
 	The Date Field must be filled out. It must be in the form mm/dd/yyyy.
 
-	The Start Time must be filled out. It must be in the form hh:mm. It is in military time or 24-hour time.
+	The Start Time must be filled out. It must be in the form hh:mm. It is in military time or
+	24-hour time.
 
-	The End Time must be filled out. It must be in the form hh:mm. It is in military time or 24-hour time.
+	The End Time must be filled out. It must be in the form hh:mm. It is in military time or
+	24-hour time.
 
 	The Location is optional. Like the Event Title, it cannot contain the symbol ).
 
 	The Description is optional. Like the Event Title and Location, it cannot contain the symbol ).
 
-	Once you have filled out all the fields, click the Save Changes button. The HAL-9000 will then save the
-	event and display it. If you do not wish to save this event, you can cancel by using the Close button.
+	Once you have filled out all the fields, click the Save Changes button. The HAL-9000 will then save
+	the event and display it. If you do not wish to save this event, you can cancel by using the
+	Close button.
 	This will close the window and take you back to the main calander.
 
 Removing Events:
 
-	To remove an event, click on the event day in month or week view, then go to day view. Then click the
-	Remove Event button at the top of the window, and then click on the event you want to remove. It should
-	now disappear.
+	To remove an event, click on the event day in month or week view, then go to day view. Then click
+	the Remove Event button at the top of the window, and then click on the event you want to remove.
+	It should now disappear.
 	
 Editing Events:
 
-	To edit an event, click on the event day in month or week view, then go to day view. Then double click on
-	the event. A new screen should pop up in which you can edit the information for the event.
+	To edit an event, click on the event day in month or week view, then go to day view. Then double
+	click on the event. A new screen should pop up in which you can edit the information for the event.
 	When you are done click on the Save Changes button.
 	If you want to discard changes, click the Close button.
