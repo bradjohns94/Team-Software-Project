@@ -9,12 +9,14 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import java.util.Date;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 public class EventInterface extends JFrame implements ActionListener {
 
-    //Parts of the actual interface
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2583482737108551950L;
+	//Parts of the actual interface
     private EventData event;
     private JButton save;
     private JButton close;

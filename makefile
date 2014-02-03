@@ -1,9 +1,12 @@
-compile: data
+compile:
 	javac *.java
 	
-data:
+data: compile
 	touch CalendarData.data
-	chmod +x CalendarData.data
 
-run: compile
-	appletviewer CalendarInterface.java
+run: data
+	appletviewer -J-Djava.security.policy=java.policy.applet CalendarInterface.java
+	
+reset:
+	rm CalendarData.data
+	touch CalendarData.data

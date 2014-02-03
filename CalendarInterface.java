@@ -8,10 +8,8 @@
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Font.*;
 import javax.swing.*;
 import java.applet.Applet;
-import java.awt.Font.*;
 import java.util.*;
 import java.awt.geom.Rectangle2D;
 
@@ -19,7 +17,11 @@ import java.awt.geom.Rectangle2D;
 
 public class CalendarInterface extends Applet implements ActionListener, KeyListener, MouseListener {
     
-    private Date selected;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5248123881360144369L;
+	private Date selected;
     private int view; //0 for month, 1 for week, 2 for day
     private Image picture;
     private EventData[] events;
@@ -35,7 +37,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
     private JTextField go;
     private int viewCord = -1; //Chooses the location of monthview button
     private Control ctrl;
-
+    
     /**init
      * First method called when opening calendar application
      * it initializes all global variables, sets bounds on button
@@ -158,7 +160,8 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
      * @param g the graphics object to draw the view
      */
 
-    private void drawDay(Graphics g) {
+    @SuppressWarnings("deprecation")
+	private void drawDay(Graphics g) {
         FontMetrics metrics = g.getFontMetrics();
         String date = selected.toString().substring(0, 10);
         date += selected.toString().substring(23, 28);
@@ -501,7 +504,8 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
         return returnArray;
     }
 
-    private boolean areSameDay(Date day1, Date day2) {
+    @SuppressWarnings("deprecation")
+	private boolean areSameDay(Date day1, Date day2) {
         if (day1.getDate() != day2.getDate()) return false;
         if (day1.getMonth() != day2.getMonth()) return false;
         return (day1.getYear() == day2.getYear());
