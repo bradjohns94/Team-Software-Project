@@ -462,6 +462,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
 
     public void update() {
         events = ctrl.getAllEvents();
+        ctrl.saveEvents();
         sortEvents();
         repaint();
     }
