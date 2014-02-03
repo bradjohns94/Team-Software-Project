@@ -17,6 +17,7 @@ public class DataStorage {
 	public DataStorage(){
 		try {
 			Scanner file = new Scanner(new File("./CalendarData.data"));
+			file.close();
 		} catch (FileNotFoundException e) {
 			//File doesn't exist, create it.
 			File newFile = new File("./CalendarData.data");

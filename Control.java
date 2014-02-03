@@ -20,19 +20,11 @@ public class Control {
 	}
 
 	/**add
-	 * Checks for collisions with other events (such as same name), and adds if no collisions
+	 * Adds the event to the event list.
 	 * @param e The event entry to be added
 	 */
 	public void add(EventData e){
-		//Check collisions with current events
 		//Add to events
-		//TODO Complete
-		for(EventData temp : events){
-			if(/*Case*/false){
-				//Ignore
-				return;
-			}
-		}
 		this.events.add(e);
 	}
 	
@@ -55,8 +47,11 @@ public class Control {
 	 * Used by Control Panel on close.
 	 */
 	public boolean saveEvents(){
+		System.out.println("Saving Data");
 		DataStorage storage = new DataStorage();
-		return storage.saveData(events);
+		boolean result = storage.saveData(events);
+		System.out.println("Was successful:" + result);
+		return result;
 	}
 	
 	/**
