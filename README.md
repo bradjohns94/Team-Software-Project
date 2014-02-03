@@ -50,3 +50,9 @@ Adding Events:
 Removing Events:
 
 	To remove an event, click on the event day in month or week view, then go to day view. Then click the Remove Event button at the top of the window, and then click on the event you want to remove. It should now disappear.
+	
+Editing Events:
+
+	To edit an event, click on the event day in month or week view, then go to day view. Then double click on the event. A new screen should pop up in which you can edit the information for the event.
+	When you are done click on the Save Changes button.
+	If you want to discard changes, click the Close button.
