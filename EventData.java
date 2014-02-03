@@ -59,20 +59,17 @@ public class EventData {
             } else {
                     size = data.length;
             }
-            for(int i = 0; i < data.length; i++){
-            	System.out.println("Init:" + data[i]);
-            }
             switch(size){
             case 5:
-                    this.title = data[0];
+            		this.location = data[4];
             case 4:
-                    this.desc = data[1];
+            		this.endTime = toDate(data[3]); 
             case 3:
                     this.startTime = toDate(data[2]);
             case 2:
-                    this.endTime = toDate(data[3]);
+                    this.desc = data[1];
             case 1:
-                    this.location = data[4];
+                    this.title = data[0];
             case 0:
             default:
             }
@@ -85,7 +82,6 @@ public class EventData {
      */
     @SuppressWarnings("deprecation")
         private Date toDate(String date) {
-    		System.out.println("Date = " + date);
             Date result = new Date();
                 result.setHours(toInt(date.substring(11,13)));
                 result.setMinutes(toInt(date.substring(14,16)));
