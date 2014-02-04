@@ -601,7 +601,7 @@ public class CalendarInterface extends Applet implements ActionListener, KeyList
 			view = 0;
 			remove(monthView);
 		} else if (e.getSource() == addEvent) { //Goto the addEvent page
-			EventInterface iface = new EventInterface(ctrl, this);
+			EventInterface iface = new EventInterface(this.selected, ctrl, this);
 			iface.init();
 			iface.setVisible(true);
 		} else if (e.getSource() == removeEvent) { //Remove the next clicked event

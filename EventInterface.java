@@ -30,6 +30,7 @@ public class EventInterface extends JFrame implements ActionListener {
 	private boolean newEvent;
 	private Control ctrl;
 	private CalendarInterface cal;
+	private Date today = null;
 
 	//For the HAL joke
 	private boolean hasClosed; //This is terrible practice
@@ -39,8 +40,9 @@ public class EventInterface extends JFrame implements ActionListener {
 	 * a brand new event instead of altering a pre-existing one
 	 */
 
-	public EventInterface(Control toSend, CalendarInterface iface) {
+	public EventInterface(Date today, Control toSend, CalendarInterface iface) {
 		super("Add Event");
+		this.today = today;
 		event = new EventData();
 		ctrl = toSend;
 		newEvent = true;
@@ -132,10 +134,30 @@ public class EventInterface extends JFrame implements ActionListener {
 		//Date box
 		String eventDate = "";
 		if (newEvent) {
-			eventDate = "mm/dd/yyyy";
+			if(today != null){
+				if(today.getMonth() < 9){
+					eventDate += "0";
+				}
+				eventDate += Integer.toString(today.getMonth() + 1);
+				eventDate += "/";
+				if(today.getDate() < 10){
+					eventDate += "0";
+				}
+				eventDate += Integer.toString(today.getDate());
+				eventDate += "/";
+				eventDate += Integer.toString(today.getYear() + 1900);
+			} else {
+				eventDate = "mm/dd/yyyy";
+			}
 		} else {
+			if(event.getStart().getMonth() < 9){
+				eventDate += "0";
+			}
 			eventDate += Integer.toString(event.getStart().getMonth() + 1);
 			eventDate += "/";
+			if(event.getStart().getDate() < 10){
+				eventDate += "0";
+			}
 			eventDate += Integer.toString(event.getStart().getDate());
 			eventDate += "/";
 			eventDate += Integer.toString(event.getStart().getYear() + 1900);
