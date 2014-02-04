@@ -25,7 +25,9 @@ Navigating the Calendar:
 	the box that is	shaded red. To change the date that is shaded red, click on another date.
 
 	Event details aren't availible in Month view. Instead, the text Events Scheduled will appear on 
-	the screen.
+	the screen. Event titles are shown in Week view, but they are not displayed in order on that date
+	and they don't give any other details. Also, not all events will be displayed if the entire list
+	of events on that day would overlap the next day.
 
 	To view event details, the view must be in Week View or Day View. 
 
